@@ -2,4 +2,4 @@ data/*
 .Rhistory
 *.pdf
 out/*
-
+.httr-oauth
