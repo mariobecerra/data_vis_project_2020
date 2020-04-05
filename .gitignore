@@ -3,3 +3,4 @@ data/*
 *.pdf
 out/*
 .httr-oauth
+*.DS_Store
