@@ -27,7 +27,8 @@ pattern_to_replace = "\\!|\\*|\\'|\\(|\\)|\\;|\\:|\\@|\\&|\\=|\\+|\\$|\\,|\\/|\\
 
 
 # for(i in 1:nrow(artist_song_plays_top)){
-for(i in 28517:nrow(artist_song_plays_top)){
+# Doing it for all 800K songs took too long. Stopped at half of them.
+for(i in 1:400645){
   
   song_name_i = artist_song_plays_top$Song[i]
   cat("Doing", i, "(", song_name_i, ")\n")
