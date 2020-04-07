@@ -38,7 +38,7 @@ song_info = mclapply(1:length(index_files), function(core_id){
     n_file_i = core_indices[i]
     
     # Name of file to read
-    file_name_i = song_files[i]
+    file_name_i = song_files[n_file_i]
     
     # Read file and transform all columns to character because some are factors
     song_info = readRDS(file_name_i) %>% 
