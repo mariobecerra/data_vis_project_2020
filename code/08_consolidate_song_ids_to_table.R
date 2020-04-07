@@ -70,7 +70,7 @@ song_info = mclapply(1:length(index_files), function(core_id){
 # })
 
 
-saveRDS(song_info, here("out/song_info_spotify.rds"))
+saveRDS(song_info, here("out/song_IDs_spotify.rds"))
 
 
 
