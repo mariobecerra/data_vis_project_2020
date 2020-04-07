@@ -13,6 +13,7 @@ dir.create(here(log_folder))
 
 
 # Iterate in a parallel way on all files
+# Takes like 2 minutes in 11 cores
 song_info = mclapply(1:length(index_files), function(core_id){
   
   # Each core has its own log file
@@ -25,7 +26,7 @@ song_info = mclapply(1:length(index_files), function(core_id){
   # Iterate over all files in "core_indices"
   
   core_df = map_df(seq_along(core_indices), function(i){
-  
+    
     # Print progress on log file  
     if(i %% 100 == 1) {
       cat("Doing file", i, "out of", length(core_indices), "\n",
@@ -48,7 +49,7 @@ song_info = mclapply(1:length(index_files), function(core_id){
   })
   return(core_df)
   
-}) %>% 
+}, mc.cores = n_cores) %>% 
   bind_rows()
 
 
