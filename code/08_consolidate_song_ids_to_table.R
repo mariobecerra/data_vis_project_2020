@@ -13,7 +13,7 @@ dir.create(here(log_folder))
 
 
 # Iterate in a parallel way on all files
-# Takes like 2 minutes in 11 cores
+# Takes like 2 minutes in 11 cores and 280 thousand files
 song_info = mclapply(1:length(index_files), function(core_id){
   
   # Each core has its own log file
