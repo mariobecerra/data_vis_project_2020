@@ -59,7 +59,7 @@ summary_k_day = tidy_draws_day %>%
     k_p10 = as.numeric(quantile(k, 0.1)),
     k_p90 = as.numeric(quantile(k, 0.9))
   ) %>% 
-  mutate(usid = cbs_lastfm_week$cust)
+  mutate(usid = cbs_lastfm_day$cust)
 
 
 
