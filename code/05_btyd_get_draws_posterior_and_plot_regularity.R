@@ -13,7 +13,7 @@ theme_set(theme_bw())
 
 
 cbs_lastfm_day = readRDS(here("out/cbs_lastfm_day.rds"))
-cbs_lastfm_week = readRDS(here("out/cbs_lastfm_week.rds"))
+# cbs_lastfm_week = readRDS(here("out/cbs_lastfm_week.rds"))
 transactions = readRDS(here("out/transactions_btyd.rds"))
 
 
@@ -26,6 +26,8 @@ draws_day = pggg.mcmc.DrawParameters(
   chains = 2,
   mc.cores = 2
 )
+
+saveRDS(draws_day, here("out/btyd_draws_day.rds"))
 
 
 
@@ -47,6 +49,7 @@ tidy_draws_day = lapply(1:length(draws_day$level_1), function(i){
 }) %>% 
   bind_rows()
 
+saveRDS(tidy_draws_day, here("out/btyd_tidy_draws_day.rds"))
 
 
 summary_k_day = tidy_draws_day %>% 
@@ -63,13 +66,13 @@ summary_k_day = tidy_draws_day %>%
 
 most_regular_day = summary_k_day %>% 
   top_n(30, median_k) %>% 
-  arrange(desc(median_k)) %>% 
+  arrange(median_k) %>% 
   mutate(ix = 1:nrow(.)) 
 
 
 least_regular_day = summary_k_day %>% 
   top_n(-30, median_k) %>% 
-  arrange(median_k) %>% 
+  arrange(desc(median_k)) %>% 
   mutate(ix = 1:nrow(.)) 
 
 
@@ -94,19 +97,20 @@ data_plot_irregular_day = least_regular_day %>%
 plot_most_regular_day = data_plot_regular_day %>% 
   ggplot() +
   geom_hline(aes(yintercept = ix), size = 0.1, color = "grey") +
-  geom_point(aes(date2, ix), size = 0.3) +
+  geom_point(aes(date2, ix), size = 0.2) +
   ggtitle("Most regular users (daily)") +
   theme(panel.grid = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank()) +
   xlab("Date") +
   ylab("User") +
-  # geom_text(
-  #   data = most_regular_day,
-  #   aes(min(data_plot_regular_day$date2) - months(3), ix, label = round(median_k, 1)),
-  #   hjust = 0.5,
-  #   size = 2.5) +
-  NULL
+  geom_text(
+    data = most_regular_day,
+    aes(max(data_plot_regular_day$date2), 
+        ix, 
+        label = paste0("k=", round(median_k, 1))),
+    hjust = -0.1,
+    size = 2.5)
 
 
 plot_least_regular_day = data_plot_irregular_day %>% 
@@ -118,7 +122,14 @@ plot_least_regular_day = data_plot_irregular_day %>%
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank()) +
   xlab("Date") +
-  ylab("User")
+  ylab("User") +
+  geom_text(
+    data = least_regular_day,
+    aes(max(data_plot_regular_day$date2), 
+        ix, 
+        label = paste0("k=", round(median_k, 1))),
+    hjust = -0.1,
+    size = 2.5)
 
 
 out_folder = "out/plots/"
